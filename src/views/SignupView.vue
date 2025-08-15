@@ -1,36 +1,63 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { SignupParamsType } from '@/services/auth/auth.type'
+import useSignupMutation from '@/services/auth/mutation/signup'
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
+const signupParams: SignupParamsType = reactive({
+  name: '',
+  email: '',
+  password: '',
+})
+const router = useRouter()
 
-function handleSignup() {
-  alert(`Signed up with: ${name.value} - ${email.value}`)
-}
+const handleSignup = useSignupMutation({
+  onSuccess: (response) => {
+    console.log('Signup successful:', response)
+    router.push('/signin')
+  },
+  onError: (error) => {
+    console.error('Signup failed:', error)
+  },
+})
 </script>
 
 <template>
   <div class="signup-container">
     <div class="signup-box">
       <h2>Sign Up</h2>
-      <form @submit.prevent="handleSignup">
-        <!-- Name -->
+      <form @submit.prevent="handleSignup.mutate(signupParams)">
+        <!-- body.name -->
         <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" v-model="name" placeholder="Enter your name" required />
+          <label>Full name</label>
+          <input
+            type="text"
+            v-model="signupParams.name"
+            placeholder="Enter your body.name"
+            required
+          />
         </div>
 
         <!-- Email -->
         <div class="form-group">
           <label>Email</label>
-          <input type="email" v-model="email" placeholder="Enter your email" required />
+          <input
+            type="email"
+            v-model="signupParams.email"
+            placeholder="Enter your email"
+            required
+          />
         </div>
 
         <!-- Password -->
         <div class="form-group">
           <label>Password</label>
-          <input type="password" v-model="password" placeholder="Enter your password" required />
+          <input
+            type="password"
+            v-model="signupParams.password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
 
         <button type="submit" class="btn-signup">Create Account</button>

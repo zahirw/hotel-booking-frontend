@@ -2,12 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const MenuData: { name: string; link: string }[] = [
-  { name: 'Home', link: '/' },
-  { name: 'Select Room', link: '/select-room' },
-  { name: 'Contact Infomation', link: '/contact-information' },
-  { name: 'Booking Confirmation', link: '/booking-confirmation' },
-]
+const MenuData: { name: string; link: string }[] = [{ name: 'Dashboard', link: '/signin' }]
 
 const route = useRouter()
 const isMenuOpen = ref(false)
@@ -45,10 +40,9 @@ const handleClickLink = (link: string) => {
 
     <!-- Mobile Navigation -->
     <nav v-if="isMenuOpen" class="nav mobile-nav">
-      <a href="#" @click="closeMenu">Home</a>
-      <a href="#" @click="closeMenu">About</a>
-      <a href="#" @click="closeMenu">Services</a>
-      <a href="#" @click="closeMenu">Contact</a>
+      <a v-for="item in MenuData" :key="item.name" @click.prevent="handleClickLink(item.link)">
+        {{ item.name }}
+      </a>
     </nav>
   </header>
 </template>

@@ -1,29 +1,55 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import type { SigninParamsType } from '@/services/auth/auth.type'
+import useSigninMutation from '@/services/auth/mutation/signin'
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
+import { useStore } from '@/stores'
 
 const router = useRouter()
-const email = ref('')
-const password = ref('')
+const store = useStore()
 
-function handleLogin() {
-  alert(`Logging in with: ${email.value}`)
-}
+const signinParams: SigninParamsType = reactive({
+  email: '',
+  password: '',
+})
+
+const handleSigin = useSigninMutation({
+  onSuccess: (response) => {
+    console.log('Signin successful:', response.token)
+    Cookies.set('token', response.token, { expires: 7 }) // Set token in cookies
+    store.currentUser = response.user // Update the store with user data
+    router.push('/')
+  },
+  onError: (error) => {
+    console.error('Signup failed:', error)
+  },
+})
 </script>
 
 <template>
   <div class="login-container">
     <div class="login-box">
       <h2>Login</h2>
-      <form @submit.prevent="handleLogin">
+      <form @submit.prevent="handleSigin.mutate(signinParams)">
         <div class="form-group">
           <label>Email</label>
-          <input type="email" v-model="email" placeholder="Enter your email" required />
+          <input
+            type="email"
+            v-model="signinParams.email"
+            placeholder="Enter your email"
+            required
+          />
         </div>
 
         <div class="form-group">
           <label>Password</label>
-          <input type="password" v-model="password" placeholder="Enter your password" required />
+          <input
+            type="password"
+            v-model="signinParams.password"
+            placeholder="Enter your password"
+            required
+          />
         </div>
 
         <button type="submit" class="btn-login">Login</button>

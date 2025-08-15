@@ -6,6 +6,10 @@ import ContactInformationView from '@/views/ContactInformationView.vue'
 import BookingConfirmationView from '@/views/BookingConfirmationView.vue'
 import SigninView from '@/views/SigninView.vue'
 import SignupView from '@/views/SignupView.vue'
+import { useStore } from '@/stores'
+
+const publicRoutes = ['home', 'signin', 'signup']
+const authPage = ['signin', 'signup']
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +19,7 @@ const router = createRouter({
       component: MainLayout,
       children: [
         {
-          path: '',
+          path: '/',
           name: 'home',
           component: HomeView,
         },
@@ -49,4 +53,14 @@ const router = createRouter({
   ],
 })
 
+router.beforeEach((to, from, next) => {
+  const store = useStore()
+  const isAuthenticated = store.currentUser !== undefined
+  console.log(store.currentUser)
+  if (typeof to.name === 'string' && !publicRoutes.includes(to.name) && !isAuthenticated)
+    next({ name: 'signin' })
+  else if (typeof to.name === 'string' && authPage.includes(to.name) && isAuthenticated)
+    next({ path: '/' })
+  else next()
+})
 export default router
