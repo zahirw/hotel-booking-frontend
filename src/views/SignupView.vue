@@ -64,7 +64,7 @@ const handleSignup = useSignupMutation({
 
         <p class="login-text">
           Already have an account?
-          <a href="#">Login</a>
+          <a @click.prevent="router.push('signin')">Login</a>
         </p>
       </form>
     </div>

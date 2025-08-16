@@ -1,25 +1,36 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
+import { addDays, format } from 'date-fns'
 import StepNavigationComponent from '@/components/StepNavigationComponent.vue'
-const rooms = [
-  {
-    id: 1,
-    imagePlaceholder: '340 × 210',
-    title: 'ROOM 1 TITLE',
-    subtitle: 'LOREM IPSUM DOLOR SIT AMET',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac ex a risus dapibus pharetra facilisis ac felis.',
-    price: '1,080',
-  },
-  {
-    id: 2,
-    imagePlaceholder: '340 × 210',
-    title: 'ROOM 2 TITLE',
-    subtitle: 'LOREM IPSUM DOLOR SIT AMET',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac ex a risus dapibus pharetra facilisis ac felis.',
-    price: '1,280',
-  },
-]
+import { computed, onMounted, ref, watch } from 'vue'
+import { getRooms } from '@/services/core/queries/getRooms'
+import type { getRoomsResponseType } from '@/services/core/core.type'
+
+const route = useRoute()
+const peoples = computed(() => route.query.peoples as string)
+const date = computed(() => new Date(route.query.date as string))
+const formattedDate = format(date.value, 'MMMM dd, yyyy')
+const sort = ref<'asc' | 'desc'>('asc')
+const data = ref<getRoomsResponseType[]>()
+
+const fetchRoomsFromQuery = async () => {
+  try {
+    const params = {
+      guests: route.query.peoples as string,
+      checkinDate: route.query.date as string,
+      sort: sort.value,
+    }
+    const res = await getRooms(params)
+    data.value = res
+  } catch (err) {
+    console.error(err)
+  }
+}
+onMounted(fetchRoomsFromQuery)
+watch([date, sort, peoples], () => {
+  fetchRoomsFromQuery()
+  console.log(data)
+})
 </script>
 
 <template>
@@ -28,29 +39,31 @@ const rooms = [
     <StepNavigationComponent />
     <!-- Dates & Sorting -->
     <div class="top-bar">
-      <div class="dates">JUN 17, 2025 → JUN 18, 2025</div>
+      <div class="dates">
+        {{ `${formattedDate} → ${format(addDays(date, 1), 'MMMM dd, yyyy')}` }}
+      </div>
       <div class="info">
-        <span>1 NIGHT | 1 GUEST</span>
+        <span>{{ `1 NIGHT | ${peoples} GUEST` }}</span>
         <label>
           SORT BY:
-          <select>
-            <option>LOWEST PRICE</option>
-            <option>HIGHEST PRICE</option>
+          <select v-model="sort">
+            <option value="asc">LOWEST PRICE</option>
+            <option value="desc">HIGHEST PRICE</option>
           </select>
         </label>
       </div>
     </div>
 
     <!-- Room List -->
-    <div class="room-card" v-for="room in rooms" :key="room.id">
-      <div class="room-image">{{ room.imagePlaceholder }}</div>
+    <div class="room-card" v-for="room in data" :key="room.id">
+      <div class="room-image">{{ room.name }}</div>
       <div class="room-details">
-        <h3>{{ room.title }}</h3>
-        <h4>{{ room.subtitle }}</h4>
-        <p>{{ room.description }}</p>
+        <h3>{{ room.name }}</h3>
+        <h4>{{ room.name }}</h4>
+        <p>{{ room.name }}</p>
       </div>
       <div class="room-price">
-        <div class="price">S${{ room.price }}/<span class="night">night</span></div>
+        <div class="price">S${{ room.pricePerNight }}/<span class="night">night</span></div>
         <small>Subject to GST and charges</small>
         <button class="book-btn">BOOK ROOM</button>
       </div>

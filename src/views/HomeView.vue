@@ -1,4 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const peoples = ref<number>(0)
+const date = ref<Date>(new Date())
+const router = useRouter()
+
+const handleSearch = () => {
+  const selectedDate = new Date(date.value)
+  const formattedDate = selectedDate.toISOString().split('T')[0]
+
+  router.push({
+    name: 'select-room',
+    query: {
+      peoples: peoples.value,
+      date: formattedDate,
+    },
+  })
+}
+</script>
 
 <template>
   <header class="book-room-page">
@@ -13,9 +33,10 @@
       <!-- Guests -->
       <div class="form-group">
         <span class="icon">👤</span>
-        <select>
+        <select v-model="peoples">
+          <option value="0">Guest</option>
           <option value="1">1</option>
-          <option value="2" selected>2</option>
+          <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
         </select>
@@ -23,12 +44,12 @@
 
       <!-- Date -->
       <div class="form-group">
-        <input type="date" value="2025-06-03" />
+        <input type="date" v-model="date" />
       </div>
     </div>
 
     <!-- Search Button -->
-    <button class="search-btn">SEARCH FOR ROOMS</button>
+    <button class="search-btn" @click.prevent="handleSearch">SEARCH FOR ROOMS</button>
   </header>
 </template>
 
