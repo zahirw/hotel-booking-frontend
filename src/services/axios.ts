@@ -1,8 +1,10 @@
 import axios from 'axios'
 import type { AxiosError } from 'axios'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 const router = useRouter()
+const token = Cookies.get('token') || undefined
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -15,7 +17,6 @@ const apiClient = axios.create({
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`
     }

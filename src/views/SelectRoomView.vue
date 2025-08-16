@@ -1,19 +1,41 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { addDays, format } from 'date-fns'
 import StepNavigationComponent from '@/components/StepNavigationComponent.vue'
 import { computed, onMounted, ref, watch } from 'vue'
-import { getRooms } from '@/services/core/queries/getRooms'
-import type { getRoomsResponseType } from '@/services/core/core.type'
+import { getRooms } from '@/services/core/queries/room'
+import type { getRoomsResponseType, postBookingRoomParamsType } from '@/services/core/core.type'
+import { postBookingRooms } from '@/services/core/mutations/booking'
+import { useStore } from '@/stores'
 
 const route = useRoute()
+const router = useRouter()
+const store = useStore()
 const peoples = computed(() => route.query.peoples as string)
 const date = computed(() => new Date(route.query.date as string))
 const formattedDate = format(date.value, 'MMMM dd, yyyy')
+const nextDay = format(addDays(date.value, 1), 'MMMM dd, yyyy')
 const sort = ref<'asc' | 'desc'>('asc')
 const data = ref<getRoomsResponseType[]>()
 
-const fetchRoomsFromQuery = async () => {
+const createBookingRoom = async (roomId: string) => {
+  try {
+    const params: postBookingRoomParamsType = {
+      roomId,
+      userId: store.currentUser?.id?.toString() as string,
+      checkin: formattedDate,
+      checkout: nextDay,
+    }
+    const res = await postBookingRooms(params)
+    if (res.status === 200) {
+      router.push(`/contact-information?bookingId=${res.data.booking.id}`)
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const fetchRooms = async () => {
   try {
     const params = {
       guests: route.query.peoples as string,
@@ -26,9 +48,10 @@ const fetchRoomsFromQuery = async () => {
     console.error(err)
   }
 }
-onMounted(fetchRoomsFromQuery)
+
+onMounted(fetchRooms)
 watch([date, sort, peoples], () => {
-  fetchRoomsFromQuery()
+  fetchRooms()
   console.log(data)
 })
 </script>
@@ -40,7 +63,7 @@ watch([date, sort, peoples], () => {
     <!-- Dates & Sorting -->
     <div class="top-bar">
       <div class="dates">
-        {{ `${formattedDate} → ${format(addDays(date, 1), 'MMMM dd, yyyy')}` }}
+        {{ `${formattedDate} → ${nextDay}` }}
       </div>
       <div class="info">
         <span>{{ `1 NIGHT | ${peoples} GUEST` }}</span>
@@ -65,7 +88,9 @@ watch([date, sort, peoples], () => {
       <div class="room-price">
         <div class="price">S${{ room.pricePerNight }}/<span class="night">night</span></div>
         <small>Subject to GST and charges</small>
-        <button class="book-btn">BOOK ROOM</button>
+        <button class="book-btn" @click.prevent="createBookingRoom(room.id.toString())">
+          BOOK ROOM
+        </button>
       </div>
     </div>
   </div>
