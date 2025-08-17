@@ -60,16 +60,17 @@ watch([date, sort, peoples], () => {
   <div class="select-room-page">
     <!-- Step Navigation -->
     <StepNavigationComponent />
-    <!-- Dates & Sorting -->
+
+    <!-- Top Bar -->
     <div class="top-bar">
       <div class="dates">
-        {{ `${formattedDate} → ${nextDay}` }}
+        <span class="date-text">{{ `${formattedDate} → ${nextDay}` }}</span>
       </div>
       <div class="info">
-        <span>{{ `1 NIGHT | ${peoples} GUEST` }}</span>
-        <label>
-          SORT BY:
-          <select v-model="sort">
+        <span class="stay-info">{{ `1 NIGHT | ${peoples} GUEST` }}</span>
+        <label class="sort-label">
+          <span>SORT BY:</span>
+          <select v-model="sort" class="sort-select">
             <option value="asc">LOWEST PRICE</option>
             <option value="desc">HIGHEST PRICE</option>
           </select>
@@ -79,15 +80,23 @@ watch([date, sort, peoples], () => {
 
     <!-- Room List -->
     <div class="room-card" v-for="room in data" :key="room.id">
-      <div class="room-image">{{ room.name }}</div>
+      <div class="room-image">340 × 210</div>
+
       <div class="room-details">
-        <h3>{{ room.name }}</h3>
-        <h4>{{ room.name }}</h4>
-        <p>{{ room.name }}</p>
+        <h3 class="room-title">{{ room.name }}</h3>
+        <h4 class="room-subtitle">Deluxe Package</h4>
+        <p class="room-description">
+          Spacious room with modern amenities. Perfect for relaxing staycation with family or
+          business trip.
+        </p>
       </div>
+
       <div class="room-price">
-        <div class="price">S${{ room.pricePerNight }}/<span class="night">night</span></div>
-        <small>Subject to GST and charges</small>
+        <div class="price">
+          S${{ room.pricePerNight }}
+          <span class="night">/night</span>
+        </div>
+        <small class="tax-note">+ GST & Service Charges</small>
         <button class="book-btn" @click.prevent="createBookingRoom(room.id.toString())">
           BOOK ROOM
         </button>
@@ -99,9 +108,9 @@ watch([date, sort, peoples], () => {
 <style scoped>
 .select-room-page {
   width: 100%;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
   padding: 1rem;
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -110,111 +119,159 @@ watch([date, sort, peoples], () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin: 1.5rem 0;
   flex-wrap: wrap;
-}
-
-.dates {
-  font-weight: bold;
-}
-
-.info {
-  display: flex;
-  align-items: center;
   gap: 1rem;
 }
 
-.info select {
-  padding: 0.25rem;
+.date-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.stay-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-right: 1rem;
+}
+
+.sort-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: white;
+  cursor: pointer;
 }
 
 /* Room Card */
 .room-card {
   display: flex;
-  background: #f8f8f0;
-  border: 1px solid #ddd;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-3px);
 }
 
 .room-image {
-  background: #ccc;
+  background: linear-gradient(135deg, #e0e0e0, #cfcfcf);
   color: #666;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 340px;
-  height: 210px;
+  width: 320px;
+  height: 200px;
   flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .room-details {
   flex: 1;
-  padding: 1rem;
-  min-width: 200px;
+  padding: 1.2rem;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.room-details h3 {
+.room-title {
   margin: 0 0 0.25rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
 }
 
-.room-details h4 {
-  margin: 0 0 0.5rem 0;
+.room-subtitle {
+  margin: 0 0 0.6rem 0;
   font-size: 0.85rem;
-  color: #888;
+  color: #777;
+  font-weight: 500;
 }
 
-.room-details p {
+.room-description {
   font-size: 0.9rem;
   line-height: 1.4;
+  color: #555;
 }
 
+/* Price & Book */
 .room-price {
-  width: 180px;
-  padding: 1rem;
+  width: 200px;
+  padding: 1.2rem;
   text-align: right;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 150px;
+  background: #fafafa;
+  border-left: 1px solid #f0f0f0;
 }
 
 .price {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #222;
 }
 
 .night {
   font-size: 0.85rem;
+  font-weight: 400;
+  color: #666;
+}
+
+.tax-note {
+  font-size: 0.75rem;
+  color: #999;
+  margin: 0.3rem 0 0.8rem;
 }
 
 .book-btn {
-  background: black;
+  background: #222;
   color: white;
-  padding: 0.5rem;
+  padding: 0.6rem;
   border: none;
-  margin-top: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
 }
 
 .book-btn:hover {
-  background: #333;
+  background: #444;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   .room-card {
     flex-direction: column;
-    align-items: center;
     text-align: center;
   }
 
   .room-image {
     width: 100%;
+    height: 180px;
   }
 
   .room-price {
     width: 100%;
+    border-left: none;
+    border-top: 1px solid #f0f0f0;
     text-align: center;
   }
 }

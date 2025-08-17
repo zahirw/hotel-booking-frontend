@@ -1,7 +1,5 @@
 import apiClient from '@/services/axios'
 import type {
-  getBookingByIdParamsType,
-  getBookingByIdResponseType,
   patchBookingRoomParamsType,
   patchBookingRoomResponseType,
   postBookingRoomParamsType,
@@ -25,14 +23,6 @@ export const patchBookingRooms = async (params: patchBookingRoomParamsType) => {
     data: {
       contactId,
     },
-  })
-  return res
-}
-
-export const getBookingById = async (params: getBookingByIdParamsType) => {
-  const res = await apiClient<getBookingByIdResponseType>({
-    method: 'GET',
-    url: `/api/bookings/${params.id}`,
   })
   return res
 }

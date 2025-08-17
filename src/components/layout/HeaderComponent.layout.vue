@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ButtonComponent from '../ButtonComponent.vue'
+import { useStore } from '@/stores'
 
-const MenuData: { name: string; link: string }[] = [{ name: 'Dashboard', link: '/signin' }]
+const MenuData: { name: string; link: string }[] = [{ name: 'Dashboard', link: '/dashboard' }]
 
-const route = useRouter()
+const router = useRouter()
+const store = useStore()
 const isMenuOpen = ref(false)
 
 const toggleMenu = () => {
@@ -17,7 +20,7 @@ const closeMenu = () => {
 const handleClickLink = (link: string) => {
   closeMenu()
   // Navigate to the clicked link
-  route.push(link)
+  router.push(link)
 }
 </script>
 
@@ -25,13 +28,22 @@ const handleClickLink = (link: string) => {
   <header class="header">
     <div class="container">
       <!-- Logo -->
-      <div class="logo">MyLogo</div>
+      <div class="logo" @click.prevent="router.push('/')">MyLogo</div>
 
       <!-- Desktop Navigation -->
-      <nav class="nav desktop-nav">
+      <nav v-if="!!store.currentUser" class="nav desktop-nav">
         <a v-for="item in MenuData" :key="item.name" @click.prevent="handleClickLink(item.link)">
           {{ item.name }}
         </a>
+      </nav>
+      <nav v-else class="nav desktop-nav">
+        <ButtonComponent
+          type="button"
+          variant="primary"
+          class="btn-login"
+          @click="router.push('/signin')"
+          >Login</ButtonComponent
+        >
       </nav>
 
       <!-- Mobile Menu Button -->
@@ -70,6 +82,7 @@ const handleClickLink = (link: string) => {
   font-size: 1.5rem;
   font-weight: bold;
   color: #0077cc;
+  cursor: pointer;
 }
 
 /* Navigation Links */
@@ -82,10 +95,20 @@ const handleClickLink = (link: string) => {
   text-decoration: none;
   color: #333;
   transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .nav a:hover {
   color: #0077cc;
+}
+
+.btn-login {
+  padding: 0.7rem 3rem 0.7rem 3rem;
+  border-radius: 12px;
+  font-weight: 700;
 }
 
 /* Mobile Menu Button */

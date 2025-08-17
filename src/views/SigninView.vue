@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { SigninParamsType } from '@/services/auth/auth.type'
-import useSigninMutation from '@/services/auth/mutation/signin'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import Cookies from 'js-cookie'
+import { signin } from '@/services/auth/mutation/signin'
 import { useStore } from '@/stores'
+import ButtonComponent from '@/components/ButtonComponent.vue'
+import InputComponent from '@/components/InputComponent.vue'
 
 const router = useRouter()
 const store = useStore()
@@ -14,28 +16,25 @@ const signinParams: SigninParamsType = reactive({
   password: '',
 })
 
-const handleSigin = useSigninMutation({
-  onSuccess: (response) => {
-    console.log('Signin successful:', response.token)
-    Cookies.set('token', response.token, { expires: 7 }) // Set token in cookies
-    store.currentUser = response.user // Update the store with user data
-    router.push('/')
-  },
-  onError: (error) => {
-    console.error('Signup failed:', error)
-  },
-})
+const handleSigin = () => {
+  signin(signinParams).then((res) => {
+    console.log(res)
+    Cookies.set('token', res.data.token)
+    store.currentUser = res.data.user
+    router.replace('/')
+  })
+}
 </script>
 
 <template>
   <div class="login-container">
     <div class="login-box">
       <h2>Login</h2>
-      <form @submit.prevent="handleSigin.mutate(signinParams)">
+      <form @submit.prevent="handleSigin()">
         <div class="form-group">
-          <label>Email</label>
-          <input
+          <InputComponent
             type="email"
+            label="Email"
             v-model="signinParams.email"
             placeholder="Enter your email"
             required
@@ -43,16 +42,15 @@ const handleSigin = useSigninMutation({
         </div>
 
         <div class="form-group">
-          <label>Password</label>
-          <input
+          <InputComponent
             type="password"
+            label="Password"
             v-model="signinParams.password"
             placeholder="Enter your password"
             required
           />
         </div>
-
-        <button type="submit" class="btn-login">Login</button>
+        <ButtonComponent type="submit">Login</ButtonComponent>
 
         <p class="signup-text">
           Don’t have an account?
@@ -90,35 +88,6 @@ h2 {
 
 .form-group {
   margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  background: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.btn-login:hover {
-  background: #357ab8;
 }
 
 .signup-text {

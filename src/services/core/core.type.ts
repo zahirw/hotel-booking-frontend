@@ -21,6 +21,10 @@ export type getBookingByIdParamsType = {
   id: string
 }
 
+export type getBookingsParamsType = {
+  userId: string
+}
+
 export type getBookingByIdResponseType = {
   id: string
   userId: string

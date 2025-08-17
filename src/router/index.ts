@@ -6,6 +6,7 @@ import ContactInformationView from '@/views/ContactInformationView.vue'
 import BookingConfirmationView from '@/views/BookingConfirmationView.vue'
 import SigninView from '@/views/SigninView.vue'
 import SignupView from '@/views/SignupView.vue'
+import DashboardView from '@/views/DashboardView.vue'
 import Cookies from 'js-cookie'
 // import { useStore } from '@/stores'
 
@@ -23,6 +24,11 @@ const router = createRouter({
           path: '/',
           name: 'home',
           component: HomeView,
+        },
+        {
+          path: '/dashboard',
+          name: 'dashboard',
+          component: DashboardView,
         },
         {
           path: '/select-room',

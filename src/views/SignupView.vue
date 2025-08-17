@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import ButtonComponent from '@/components/ButtonComponent.vue'
+import InputComponent from '@/components/InputComponent.vue'
 import type { SignupParamsType } from '@/services/auth/auth.type'
 import useSignupMutation from '@/services/auth/mutation/signup'
 import { reactive } from 'vue'
@@ -29,9 +31,9 @@ const handleSignup = useSignupMutation({
       <form @submit.prevent="handleSignup.mutate(signupParams)">
         <!-- body.name -->
         <div class="form-group">
-          <label>Full name</label>
-          <input
+          <InputComponent
             type="text"
+            label="Full name"
             v-model="signupParams.name"
             placeholder="Enter your body.name"
             required
@@ -40,9 +42,9 @@ const handleSignup = useSignupMutation({
 
         <!-- Email -->
         <div class="form-group">
-          <label>Email</label>
-          <input
+          <InputComponent
             type="email"
+            label="Email"
             v-model="signupParams.email"
             placeholder="Enter your email"
             required
@@ -51,16 +53,16 @@ const handleSignup = useSignupMutation({
 
         <!-- Password -->
         <div class="form-group">
-          <label>Password</label>
-          <input
+          <InputComponent
             type="password"
+            label="Password"
             v-model="signupParams.password"
             placeholder="Enter your password"
             required
           />
         </div>
 
-        <button type="submit" class="btn-signup">Create Account</button>
+        <ButtonComponent type="submit" variant="secondary">Create Account</ButtonComponent>
 
         <p class="login-text">
           Already have an account?
@@ -100,35 +102,6 @@ h2 {
   margin-bottom: 15px;
 }
 
-label {
-  display: block;
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.btn-signup {
-  width: 100%;
-  padding: 12px;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.btn-signup:hover {
-  background: #3e8e41;
-}
-
 .login-text {
   text-align: center;
   margin-top: 15px;
@@ -138,6 +111,7 @@ input {
 .login-text a {
   color: #4caf50;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .login-text a:hover {
