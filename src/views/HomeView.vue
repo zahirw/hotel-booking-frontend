@@ -53,7 +53,7 @@ const handleSearch = () => {
                 />
               </svg>
             </span>
-            <input type="number" v-model="peoples" style="max-width: 50px" />
+            <input type="number" v-model="peoples" />
           </div>
 
           <!-- Date -->
@@ -74,7 +74,7 @@ const handleSearch = () => {
                 />
               </svg>
             </span>
-            <input type="date" v-model="date" />
+            <input type="date" v-model="date" style="width: 100%" />
           </div>
 
           <!-- Search Button -->
@@ -141,6 +141,7 @@ const handleSearch = () => {
 
 .booking-form {
   display: flex;
+  flex-direction: column;
   align-items: center;
   background: rgba(255, 255, 255, 0.15);
   padding: 1rem 1.5rem;
@@ -156,6 +157,9 @@ const handleSearch = () => {
   background: white;
   padding: 0.6rem 1rem;
   border-radius: 8px;
+}
+.form-group input {
+  width: 130px;
 }
 
 .form-group select,
@@ -186,5 +190,21 @@ const handleSearch = () => {
 .icon {
   display: flex;
   align-items: center;
+}
+
+@media (min-width: 768px) {
+  .booking-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    gap: 1rem;
+    backdrop-filter: blur(8px);
+  }
+  .form-group input {
+    width: 50px;
+  }
 }
 </style>
