@@ -26,3 +26,12 @@ export const patchBookingRooms = async (params: patchBookingRoomParamsType) => {
   })
   return res
 }
+
+export const deleteBookingRooms = async (params: { id: string }) => {
+  const { id } = params
+  const res = await apiClient<patchBookingRoomResponseType>({
+    method: 'DELETE',
+    url: `/api/bookings/${id}`,
+  })
+  return res
+}

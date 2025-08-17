@@ -25,6 +25,7 @@ const createBookingRoom = async (roomId: string) => {
       userId: store.currentUser?.id?.toString() as string,
       checkin: formattedDate,
       checkout: nextDay,
+      totalGuest: route.query.peoples as string,
     }
     const res = await postBookingRooms(params)
     if (res.status === 200) {
@@ -80,7 +81,8 @@ watch([date, sort, peoples], () => {
 
     <!-- Room List -->
     <div class="room-card" v-for="room in data" :key="room.id">
-      <div class="room-image">340 × 210</div>
+      <img :src="room.image" :alt="room.name" class="room-image" />
+      <!-- <div class="room-image">340 × 210</div> -->
 
       <div class="room-details">
         <h3 class="room-title">{{ room.name }}</h3>
@@ -112,6 +114,7 @@ watch([date, sort, peoples], () => {
   padding: 1rem;
   max-width: 1000px;
   margin: auto;
+  margin-top: 2rem;
 }
 
 /* Top Bar */
@@ -169,16 +172,12 @@ watch([date, sort, peoples], () => {
 }
 
 .room-image {
-  background: linear-gradient(135deg, #e0e0e0, #cfcfcf);
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  object-fit: cover;
   width: 320px;
   height: 200px;
-  flex-shrink: 0;
+  /* flex-shrink: 0;
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: 500; */
 }
 
 .room-details {

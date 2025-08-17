@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import BookingDetailCard from '@/components/BookingDetailCard.vue'
+import ButtonComponent from '@/components/ButtonComponent.vue'
 import type { getBookingByIdResponseType, getRoomsResponseType } from '@/services/core/core.type'
 import { getBookingById } from '@/services/core/queries/booking'
 import { getRoom } from '@/services/core/queries/room'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const roomId = ref<string>()
 const contactId = ref<string>()
+const bookingId = route.query.bookingId as string
 const bookingData = ref<getBookingByIdResponseType>()
 const roomData = ref<getRoomsResponseType>()
 
@@ -39,13 +42,27 @@ onMounted(() => fetchBooking())
     </p>
 
     <!-- Booking Details -->
-    <BookingDetailCard v-if="roomId && contactId" :room-id="roomId" :contact-id="contactId" />
+    <BookingDetailCard
+      v-if="roomId && contactId && bookingId"
+      :room-id="roomId"
+      :contact-id="contactId"
+      :booking-id="bookingId"
+    />
+    <div style="display: flex; align-items: center">
+      <ButtonComponent
+        type="button"
+        variant="primary"
+        class="btn-dashboard"
+        @click.prevent="router.replace('/dashboard')"
+        >Go to Dashboard</ButtonComponent
+      >
+    </div>
   </div>
 </template>
 
 <style scoped>
 .booking-confirmation {
-  max-width: 1000px;
+  max-width: 100vw;
   margin: auto;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -61,5 +78,18 @@ onMounted(() => fetchBooking())
   font-size: 14px;
   margin-bottom: 20px;
   line-height: 1.5;
+}
+
+.btn-dashboard {
+  margin: 1rem auto;
+  max-width: 30vw;
+  border-radius: 100px;
+}
+
+@media (min-width: 768px) {
+  .booking-confirmation {
+    margin: auto 0;
+    padding: 0 30rem;
+  }
 }
 </style>

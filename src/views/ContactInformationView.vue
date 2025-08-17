@@ -98,9 +98,9 @@ onMounted(() => {
       <div class="summary">
         <p class="date">JUN 17, 2025 → JUN 18, 2025</p>
         <p class="nights">1 NIGHT</p>
-        <p class="guests">ROOM FOR: {{ roomData?.maxGuests }} GUEST</p>
+        <p class="guests">ROOM FOR: {{ bookingData?.totalGuest }} GUEST</p>
 
-        <div class="room-image">340 × 210</div>
+        <img :src="roomData?.image" :alt="roomData?.name" class="room-image" />
 
         <h3 class="room-title">{{ roomData?.name }}</h3>
         <div class="price-breakdown">
@@ -220,16 +220,10 @@ select:focus {
 }
 
 .room-image {
-  width: 100%;
-  height: 160px;
-  background: linear-gradient(135deg, #e0e0e0, #cfcfcf);
-  color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 1rem 0;
-  border-radius: 10px;
-  font-size: 0.9rem;
+  width: 320px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 20px;
 }
 
 .room-title {

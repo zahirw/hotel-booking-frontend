@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const step = ref(2)
+const route = useRoute()
 </script>
 <template>
   <div class="steps">
-    <div class="step" :class="{ active: step === 1 }">1 SEARCH</div>
-    <div class="step" :class="{ active: step === 2 }">2 SELECT ROOM</div>
-    <div class="step" :class="{ active: step === 3 }">3 CONTACT INFORMATION</div>
-    <div class="step" :class="{ active: step === 4 }">4 CONFIRMATION</div>
+    <div class="step" :class="{ active: route.path === '/' }">1 SEARCH</div>
+    <div class="step" :class="{ active: route.path === '/select-room' }">2 SELECT ROOM</div>
+    <div class="step" :class="{ active: route.path === '/contact-information' }">
+      3 CONTACT INFORMATION
+    </div>
+    <div class="step" :class="{ active: route.path === '/booking-confirmation' }">
+      4 CONFIRMATION
+    </div>
   </div>
 </template>
 

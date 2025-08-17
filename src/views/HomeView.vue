@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ButtonComponent from '@/components/ButtonComponent.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -23,107 +22,140 @@ const handleSearch = () => {
 
 <template>
   <div class="book-room-page">
+    <section class="hero">
+      <img
+        src="https://smithgeestudio.com/wp-content/uploads/2023/03/Harpeth-Hotel-Hero-1920-x-1000.jpg"
+        alt="Hotel hero image"
+        class="hero-image"
+      />
+      <div class="hero-overlay">
+        <!-- Title & Subtitle -->
+        <h1 class="hero-heading">Experience Luxury & Comfort</h1>
+        <p class="hero-subtitle">Book your perfect stay with us</p>
+
+        <!-- Booking Form -->
+        <div class="booking-form">
+          <!-- Guests -->
+          <div class="form-group">
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="black"
+                style="width: 20px"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                />
+              </svg>
+            </span>
+            <input type="number" v-model="peoples" style="max-width: 50px" />
+          </div>
+
+          <!-- Date -->
+          <div class="form-group">
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="black"
+                style="width: 20px"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+                />
+              </svg>
+            </span>
+            <input type="date" v-model="date" />
+          </div>
+
+          <!-- Search Button -->
+          <button class="search-btn" @click.prevent="handleSearch">SEARCH</button>
+        </div>
+      </div>
+    </section>
     <!-- Banner -->
-    <div class="banner">1000 × 400</div>
-
-    <!-- Title -->
-    <h2 class="title">BOOK A ROOM</h2>
-
-    <!-- Booking Form -->
-    <div class="booking-form">
-      <!-- Guests -->
-      <div class="form-group">
-        <span class="icon">👤</span>
-        <select v-model="peoples">
-          <option value="0">Guest</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-        </select>
-      </div>
-
-      <!-- Date -->
-      <div class="form-group">
-        <span class="icon">📅</span>
-        <input type="date" v-model="date" />
-      </div>
-    </div>
-
-    <!-- Search Button -->
-    <ButtonComponent variant="primary" @click.prevent="handleSearch"
-      >Search for rooms</ButtonComponent
-    >
-    <button class="search-btn" @click.prevent="handleSearch">SEARCH FOR ROOMS</button>
+    <!-- <div class="banner">1000 × 400</div> -->
   </div>
 </template>
 
 <style scoped>
 .book-room-page {
   text-align: center;
-  padding: 2rem 1rem;
+  /* padding: 2rem 1rem; */
   font-family: 'Segoe UI', Roboto, sans-serif;
   background: #fafafa;
   min-height: 100vh;
 }
-
-/* Banner */
-.banner {
-  background: linear-gradient(135deg, #4a90e2, #357ab8);
+.hero {
+  position: absolute;
+  top: 0;
   width: 100%;
-  max-width: 1000px;
-  height: 300px;
-  margin: 0 auto;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  height: 100%; /* adjust as needed */
+  overflow: hidden;
+  z-index: 0;
+}
+.hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  font-size: 2rem;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
   color: white;
-  font-weight: 600;
+  text-align: center;
+  padding: 2rem;
 }
 
-/* Title */
-.title {
-  margin-top: 2rem;
-  font-size: 1.5rem;
+.hero-heading {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   letter-spacing: 2px;
-  font-weight: 600;
-  color: #333;
 }
 
-/* Booking Form */
+.hero-subtitle {
+  font-size: 1.2rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
 .booking-form {
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 2rem 0;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
   gap: 1rem;
-  flex-wrap: wrap;
+  backdrop-filter: blur(8px);
 }
 
 .form-group {
   display: flex;
   align-items: center;
+  gap: 10px;
   background: white;
   padding: 0.6rem 1rem;
-  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition:
-    border 0.2s,
-    box-shadow 0.2s;
-}
-
-.form-group:hover {
-  border-color: #4a90e2;
-  box-shadow: 0 3px 8px rgba(74, 144, 226, 0.15);
-}
-
-.form-group .icon {
-  margin-right: 0.5rem;
-  font-size: 1.1rem;
 }
 
 .form-group select,
@@ -132,31 +164,27 @@ const handleSearch = () => {
   background: transparent;
   font-size: 1rem;
   outline: none;
-  padding: 0.2rem;
+  color: #333;
 }
 
-/* Search Button */
 .search-btn {
-  background: #4a90e2;
+  background: #ff6f61;
   color: white;
-  padding: 0.9rem 2rem;
+  padding: 0.8rem 1.8rem;
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  letter-spacing: 1px;
+  font-weight: 600;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
-  transition:
-    background 0.25s,
-    transform 0.1s;
+  transition: background 0.25s;
 }
 
 .search-btn:hover {
-  background: #357ab8;
-  transform: translateY(-1px);
+  background: #e65c50;
 }
 
-.search-btn:active {
-  transform: translateY(0);
+.icon {
+  display: flex;
+  align-items: center;
 }
 </style>

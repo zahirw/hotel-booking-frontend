@@ -28,7 +28,7 @@ const handleClickLink = (link: string) => {
   <header class="header">
     <div class="container">
       <!-- Logo -->
-      <div class="logo" @click.prevent="router.push('/')">MyLogo</div>
+      <div class="logo" @click.prevent="router.push('/')">BOOKING</div>
 
       <!-- Desktop Navigation -->
       <nav v-if="!!store.currentUser" class="nav desktop-nav">

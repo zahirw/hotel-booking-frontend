@@ -8,7 +8,7 @@ import SigninView from '@/views/SigninView.vue'
 import SignupView from '@/views/SignupView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import Cookies from 'js-cookie'
-// import { useStore } from '@/stores'
+import { useStore } from '@/stores'
 
 const publicRoutes = ['home', 'signin', 'signup']
 const authPage = ['signin', 'signup']
@@ -61,12 +61,22 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // const store = useStore()
-  // const isAuthenticated = store.currentUser !== undefined
-  const isAuthenticated = !!Cookies.get('token') // Check if token exists in cookies
-  if (typeof to.name === 'string' && !publicRoutes.includes(to.name) && !isAuthenticated)
+  const store = useStore()
+  const isAuthenticated = store.currentUser !== undefined
+  // const isAuthenticated = !!Cookies.get('token') // Check if token exists in cookies
+  if (
+    typeof to.name === 'string' &&
+    !publicRoutes.includes(to.name) &&
+    !isAuthenticated &&
+    !Cookies.get('token')
+  )
     next({ name: 'signin' })
-  else if (typeof to.name === 'string' && authPage.includes(to.name) && isAuthenticated)
+  else if (
+    typeof to.name === 'string' &&
+    authPage.includes(to.name) &&
+    isAuthenticated
+    // !!Cookies.get('token')
+  )
     next({ path: '/' })
   else next()
 })

@@ -32,6 +32,7 @@ export type getBookingByIdResponseType = {
   checkin: string
   checkout: string
   contactId: string
+  totalGuest: string
 }
 
 export type postBookingRoomParamsType = {
@@ -39,6 +40,7 @@ export type postBookingRoomParamsType = {
   checkin: string
   checkout: string
   userId: string
+  totalGuest: string
 }
 
 export type patchBookingRoomParamsType = {
