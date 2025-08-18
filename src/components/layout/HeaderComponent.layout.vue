@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ButtonComponent from '../ButtonComponent.vue'
 import { useStore } from '@/stores'
+import Cookies from 'js-cookie'
 
 const MenuData: { name: string; link: string }[] = [{ name: 'Dashboard', link: '/dashboard' }]
 
@@ -22,6 +23,12 @@ const handleClickLink = (link: string) => {
   // Navigate to the clicked link
   router.push(link)
 }
+
+const handleLogout = () => {
+  Cookies.remove('token')
+  store.currentUser = undefined
+  store.token = undefined
+}
 </script>
 
 <template>
@@ -35,6 +42,7 @@ const handleClickLink = (link: string) => {
         <a v-for="item in MenuData" :key="item.name" @click.prevent="handleClickLink(item.link)">
           {{ item.name }}
         </a>
+        <a style="color: red; margin-left: 1rem" @click.prevent="handleLogout()">Logout</a>
       </nav>
       <nav v-else class="nav desktop-nav">
         <ButtonComponent

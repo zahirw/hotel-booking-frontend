@@ -1,10 +1,7 @@
 import axios from 'axios'
 import type { AxiosError } from 'axios'
-import { useRouter } from 'vue-router'
+import router from '@/router'
 import Cookies from 'js-cookie'
-
-const router = useRouter()
-const token = Cookies.get('token') || undefined
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -18,6 +15,7 @@ const apiClient = axios.create({
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
+    const token = Cookies.get('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -34,7 +32,7 @@ apiClient.interceptors.response.use(
       console.error('API Error:', error.response.data)
       if (error.response.status === 401) {
         // Token expired → redirect to login
-        router.push('/login')
+        router.push('/signin')
       }
     } else if (error.request) {
       console.error('Network Error:', error.message)

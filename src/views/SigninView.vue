@@ -20,6 +20,7 @@ const handleSigin = () => {
   signin(signinParams).then((res) => {
     console.log(res)
     Cookies.set('token', res.data.token)
+    store.token = res.data.token
     store.currentUser = res.data.user
     router.replace('/')
   })
