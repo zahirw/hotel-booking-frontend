@@ -129,6 +129,7 @@ onMounted(() => {
   padding: 1rem;
   margin: auto;
   max-width: 1000px;
+  margin-top: 2rem;
 }
 
 /* Layout */
